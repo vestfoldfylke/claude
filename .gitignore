@@ -141,3 +141,32 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# PowerShell
+*.ps1.bak
+profile.ps1
+*.psm1.bak
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# PowerShell credential and secret files
+*.cred
+*.pfx
+*.p12
+*.key
+secrets.ps1
+*secrets*.ps1
+*credentials*.ps1
+
+# PowerShell output / temp
+*.tmp
+*.temp
+transcript*.txt
+PSScriptAnalyzerResults*
+
+# MacOs
+.DS_Store
+
+# Zip files
+*.zip
