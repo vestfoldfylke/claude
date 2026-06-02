@@ -105,7 +105,7 @@ Only Google Fonts is allowed as external CDN. Load Nunito Sans here:
 
 ```html
 <!doctype html>
-<html lang="en">
+<html lang="nb">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%sveltekit.assets%/favicon.png" />
@@ -175,7 +175,8 @@ Ensure `tsconfig.json` targets modern TypeScript 6 features:
     "moduleResolution": "bundler",
     "target": "ES2022",
     "verbatimModuleSyntax": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "types": ["@digdir/designsystemet-web"]
   }
 }
 ```
@@ -184,38 +185,58 @@ Ensure `tsconfig.json` targets modern TypeScript 6 features:
 
 ## CSS Discipline — Non-Negotiables
 
-**Before writing a single CSS rule, check if Designsystemet already handles it. Prefer native HTML elements and DS components whenever possible.**
+**Before writing ANY HTML element or CSS rule: look up the DS reference files. If a DS class or component exists for it, you MUST use it — no exceptions.**
 
-### Native HTML elements
-- See `references/css-components/*.css` for all available classes and attributes. These cover most common UI patterns (buttons, cards, alerts, tags, typography, etc.) with built-in theming via `data-color` and `data-variant`.
+### Mandatory DS class lookup
 
-### Custom DS web components
-- See `references/custom-html-components.md` for the custom DS web components.
+**ALWAYS** see - `references/components.md` — DS classes for usage of semantic elements, custom html elements, and common patterns
 
-### Designsystemet CSS variables and tokens
-- See `references/designsystemet.css` for theming vars and tokens (spacing, variants, colors)
+### Web components vs CSS-only — exhaustive whitelist
+
+`@digdir/designsystemet-web` registers exactly these custom elements:
+
+| Custom element | Also needs CSS class? |
+|---|---|
+| `<ds-breadcrumbs>` | yes — `class="ds-breadcrumbs"` |
+| `<ds-error-summary>` | yes — `class="ds-error-summary"` |
+| `<ds-field>` | yes — `class="ds-field"` |
+| `<ds-pagination>` | yes — `class="ds-pagination"` |
+| `<ds-suggestion>` | no |
+| `<ds-tabs>`, `<ds-tablist>`, `<ds-tab>`, `<ds-tabpanel>` | `<ds-tabs>` needs `class="ds-tabs"` |
+
+**Everything else is CSS-only.** If the component name is not in the table above, you MUST use a standard HTML element with the DS class — never invent a `<ds-X>` custom element for it. Examples:
+
+```html
+<!-- CORRECT -->
+<div class="ds-alert" data-color="info" role="alert">...</div>
+<button class="ds-button">...</button>
+<div class="ds-card">...</div>
+
+<!-- WRONG — these custom elements do not exist -->
+<ds-alert class="ds-alert">...</ds-alert>
+<ds-button class="ds-button">...</ds-button>
+<ds-card class="ds-card">...</ds-card>
+```
 
 ### What you must NEVER do
 
+- **No naked semantic elements** — never write `<h2>`, `<p>`, `<label>`, `<a>`, `<button>`, or a card `<div>` without the corresponding DS class from the table above.
 - **No custom color variables** — never define `--color-*` or `--brand-*` in `:root`. Use DS tokens.
 - **No hardcoded hex/rgb colors** — no `#3b82f6`, `rgba(0,0,0,0.5)`, etc. Use DS color tokens instead.
 - **No `font-family` declarations in component styles** — it's already inherited from `:root` via `--ds-font-family`. Every repeated declaration is noise.
-- **No custom `font-size` for text** — use `data-size` on `ds-heading` / `ds-paragraph` instead.
-- **No custom button, card, alert, tag, or tab styling** — use the DS components below.
+- **No custom `font-size` for text** — use `data-size` on `.ds-heading` / `.ds-paragraph` instead.
+- **No custom button, card, alert, tag, or tab styling** — use the DS components.
 
 ### Custom `<style>` blocks are for layout only
 
 The only CSS you should write in a component's `<style>` block:
 - `display: flex` / `grid` and related properties
 - `max-width`, `width`, `height`
-- `padding`, `margin` — prefer `var(--ds-spacing-N)` over hardcoded `px` values
+- `padding`, `margin` — prefer `var(--ds-size-N)` tokens over hardcoded `px` values
 - `position`, `z-index` for sticky or overlapping elements
 - `overflow`, `text-decoration: none` (for link-as-card patterns)
 
 If you're about to write `background:`, `color:`, `border-color:`, `font-size:`, or `font-family:` in a custom style — stop and use a DS class or token instead.
-
-## Using Designsystemet Components
-See `references/css-components/*.css`, `references/custom-html-components.md`, and `references/designsystemet.css` for a complete guide on usage. **Always check there first before writing custom styles or components.**
 
 ---
 
@@ -245,7 +266,9 @@ These principles keep prototypes lean and user-testing-ready:
 3. **Fake data is fine** — hardcode realistic sample data; avoid real APIs unless required
 4. **Accessible by default** — Designsystemet components are WCAG-compliant; use semantic HTML
 5. **One route per screen** — use SvelteKit file-based routing to separate screens naturally
-6. **Shared state** — use Svelte stores (`$state` in `.svelte.ts` files or `writable` from `svelte/store`) for cross-page state
+6. **Shared state** — use shared reactive state in `.svelte.ts` files with `$state` for cross-page state
+7. **Norwegian language** — all UI text, labels, headings, and placeholder content must be written in Norwegian Bokmål (nb). Never use English as the display language.
+8. **Not for production** — every prototype must display a clearly visible disclaimer, e.g. a banner at the top of the page: "Dette er en prototype laget av Claude og kan ikke brukes i produksjon." Use `<div class="ds-alert" data-color="info" role="alert">` for this (`ds-alert` is CSS-only — never `<ds-alert>`).
 
 ---
 
@@ -289,10 +312,10 @@ After scaffolding, always:
 1. Run `npm run dev` to confirm the dev server starts
 2. Run `npm audit` and report results
 3. Tell the user how to run it locally: `npm run dev`
-4. If deploying: install `@sveltejs/adapter-static`, switch the adapter in `svelte.config.js`, run `npm run build`, confirm the `build/` output
-5. Run the security review checklist below against the actual codebase
-6. Summarize the security review findings
-7. Offer to add more screens, tweak components, or add state management
+4. Run the security review checklist below against the actual codebase
+5. Summarize the security review findings
+6. Offer to add more screens, tweak components, or add state management
+7. Provide the user with a zip file of the full project
 
 ---
 
