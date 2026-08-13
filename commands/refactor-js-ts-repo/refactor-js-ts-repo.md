@@ -49,6 +49,9 @@ Utfør følgende refaktoreringer trinn for trinn. Dersom et eller flere av stege
 
 6. **Migrer JavaScript til TypeScript:**
     - Dersom repoet er skrevet i JavaScript (`.js`), konverter filene til TypeScript (`.ts`) og esm.
+    - Hvis types skal exportes, putt dem sammen i en mappe som heter types. Dersom det er en type som bare skal brukes internt i en TypeScript fil kan den opprettes i samme fil, men da helt først i fila, en linje under alle importene.
+    - Alle variabler skal ha eksplisitt satt type
+    - Alle funksjoner skal ha eksplisitt satt retur type
     - Legg til `typescript` og nødvendige `@types/*`-pakker i dev dependencies dersom de mangler.
     - Opprett `build` script i `package.json` hvis det ikke allerede er der.
     - Opprett/konfigurer en gyldig `tsconfig.json`.
