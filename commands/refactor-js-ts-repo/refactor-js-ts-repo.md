@@ -57,3 +57,8 @@ Utfør følgende refaktoreringer trinn for trinn. Dersom et eller flere av stege
     - Opprett/konfigurer en gyldig `tsconfig.json`.
     - Kjør typechecking (`npx tsc --noEmit`), test og build til alt kompilerer og passerer uten feil.
     - Når alle tester kjører uten problemer og build kommando kjører uten problemer, committes dette med følgende message: `chore: Migrated from JavaScript til TypeScript`.
+
+7. **Migrer Azure Functions til 4.x**
+    - Dersom `host.json` tilsier at det ikke brukes **Azure Functions 4.x**, oppgrader til **4.x** i `host.json` og alle endepunktene.
+    - `app.http.handler / app.timer.handler / app.*.handler` skal ikke skrives inline, men ha en egen arrow funksjon definert i samme fil
+    - `app.timer.schedule` skal peke til en environment variabel i stedet for å ha cron expression hardkodet inn
