@@ -62,3 +62,11 @@ Utfør følgende refaktoreringer trinn for trinn. Dersom et eller flere av stege
     - Dersom `host.json` tilsier at det ikke brukes **Azure Functions 4.x**, oppgrader til **4.x** i `host.json` og alle endepunktene.
     - `app.http.handler / app.timer.handler / app.*.handler` skal ikke skrives inline, men ha en egen arrow funksjon definert i samme fil
     - `app.timer.schedule` skal peke til en environment variabel i stedet for å ha cron expression hardkodet inn
+
+
+8. **Code cleanup**
+    - if-statements skal alltid ha brackets. Selv oneliner if-statements.
+        - Hvis if-statementen er en null sjekk eller har noe med variabelen deklarert over, kan if-statementen komme på linjen under. Hvis ikke skal if-statementen ha en blank linje over seg.
+        - Det skal være en blank linje mellom slutt bracket for if-statementen og neste kode. Unntaket er hvis det er slutten på scopet.
+    - Kode som hører sammen kan stå på linje etter hverandre. Kode som ikke direkte hører sammen skal ha en blank linje melloms seg.
+    - JSON i kode skal puttes på hver sin linje, med mindre det bare er en property i JSON'en.
