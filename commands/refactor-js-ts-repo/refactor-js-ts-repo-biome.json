@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.7/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.6/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -29,6 +29,9 @@
           },
           "level": "error"
         }
+      },
+      "style": {
+        "useBlockStatements": "error"
       }
     },
     "includes": ["**", "!dist", "!node_modules", "!!package.json"]
@@ -50,7 +53,8 @@
       "linter": {
         "rules": {
           "correctness": {
-            "noUnusedVariables": "error"
+            "noUnusedVariables": "error",
+            "noUnusedImports": "error"
           },
           "complexity": {
             "useLiteralKeys": "off"
@@ -59,7 +63,8 @@
             "noUnusedTemplateLiteral": "error",
             "noUselessElse": "error",
             "useCollapsedIf": "error",
-            "useConst": "error"
+            "useConst": "error",
+            "useImportType": "error"
           }
         }
       }
